@@ -1,27 +1,28 @@
-# استفاده از ایمیج سبک پایتون
-FROM python:3.14
+# استفاده از ایمیج سبک و پایدار
+FROM python:3.12-slim
 
-# تنظیم متغیرهای محیطی برای عملکرد بهتر پایتون در داکر
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# تعیین دایرکتوری کاری درون کانتینر
 WORKDIR /app
 
-# نصب ابزارهای مورد نیاز سیستم‌عامل در صورت نیاز
+# نصب ابزارهای مورد نیاز سیستم‌عامل
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# کپی فایل وابستگی‌ها و نصب پکیج‌ها
-COPY requirements.txt /app/
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# نصب uv مستقیماً از ایمیج رسمی آن (فوق‌العاده سریع و استاندارد)
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
-# کپی کل پروژه به داخل کانتینر
+# نصب پکیج‌ها با استفاده از uv و کش داکر
+COPY requirements.txt /app/
+RUN uv pip install --system --no-cache -r requirements.txt
+
+# کپی پروژه
 COPY . /app/
 
-# پورتی که جنگو روی آن سرویس می‌دهد
 EXPOSE 8000
 
-# دستور پیش‌فرض برای اجرای سرور توسعه
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
