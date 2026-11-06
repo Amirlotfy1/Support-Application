@@ -18,33 +18,6 @@ drf-spectacular>=0.28.0
 django-silk>=5.3.0
 ```
 
-## Local Development Setup & Installation
-
-### 1. Clone & Initialize with uv
-```
-git clone https://github.com/Amirlotfy1/Support-Application.git
-cd support_application
-```
-
-```bash
-uv venv
-```
-
-#### Activate environment
-```bash
-# Linux / macOS:
-source .venv/bin/activate
-```
-```bash
-# Windows (PowerShell):
-.\.venv\Scripts\Activate.ps1
-```
-
-### 2. Install Dependencies
-```bash
-uv pip install -r requirements.txt
-```
-
 # env file
 3. Environment Variables Configuration (.env)
 Create a .env file in the project root directory:
